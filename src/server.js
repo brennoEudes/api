@@ -1,5 +1,7 @@
 require("express-async-errors"); // precisa ser aqui no início de tudo!
 
+const database = require("./database/sqlite"); // importe database
+
 const AppError = require("./utils/AppError"); // importe p/ configurar o tratamento de exceções!
 
 const express = require("express"); // importando tudo da pasta "express" q está dentro da node_modules
@@ -11,6 +13,8 @@ const app = express(); // inicializando o express
 app.use(express.json()); // informa a aplicação q vamos receber as informações enviadas no corpo da REQ no formato json!
 
 app.use(routes); // usa todos os grupos de rotas da aplicação, recebidos do index.js da pasta routes.
+
+database(); // executa o banco de dados
 
 // informa a rota
 // app.get("/message/:id/:user", (request, response) => {
