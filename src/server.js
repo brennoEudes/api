@@ -1,4 +1,4 @@
-require("express-async-errors"); // precisa ser aqui no início de tudo! (obs: coloquei "express", pois o exemplo da aula"express-async-errors não estava sendo encontrado")
+require("express-async-errors"); // precisa ser aqui no início de tudo!
 
 const AppError = require("./utils/AppError"); // importe p/ configurar o tratamento de exceções!
 
