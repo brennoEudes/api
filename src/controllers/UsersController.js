@@ -106,9 +106,9 @@ class UsersController {
     name = ?,
     email = ?,
     password = ?,
-    updated_at = ?
+    updated_at = DATETIME('now')
     WHERE id = ?`,
-      [user.name, user.email, user.password, new Date(), id] // new Date gera a data/hora atual no server
+      [user.name, user.email, user.password, id] // Substituímos fcn JS Date() por fnc DB DATETIME() p/ ficar no formato correto no DB.
     );
 
     return response.status(200).json(); // se omitir o status, ele retorna 200 por padrão
