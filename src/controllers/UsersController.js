@@ -78,9 +78,9 @@ class UsersController {
       throw new AppError("Este email já está em uso!");
     }
 
-    // atualiza os dados:
-    user.name = name;
-    user.email = email;
+    // atualiza os dados (c/ nullish operator: se tiver conteúdo no input, atualiza input. Se não, mantém o conteúdo do DB, evitando que o campo fique vazio):
+    user.name = name ?? user.name;
+    user.email = email ?? user.email;
 
     // verificando se o usuário informou a senha antiga:
     if (password && !old_password) {
