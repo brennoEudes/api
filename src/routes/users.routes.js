@@ -29,4 +29,6 @@ const usersController = new UsersController();
 /* DEPOIS DO CONTROLLER */
 usersRoutes.post("/", usersController.create); // quando for usar middleware, podemos na rota depois do caminho "/";
 
+usersRoutes.put("/:id", usersController.update); // mudamos o método HTTP e passando id como parâmetro
+
 module.exports = usersRoutes; // exporta as rotas p/ server.js e outros arquivos usarem!

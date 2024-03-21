@@ -1,3 +1,5 @@
+const { hash, compare } = require("bcryptjs"); // pega fcn geradora de criptografia
+
 const AppError = require("../utils/AppError");
 
 const sqliteConnection = require("../database/sqlite"); // importe conexão com bando de dados
@@ -23,6 +25,9 @@ class UsersController {
   //   response.status(201).json({ name, email, password }); // já volta no padrão JSON (obj)
   // }
 
+  // Formato depois e integrado DB:
+
+  // FUNÇÃO CREATE
   async create(request, response) {
     const { name, email, password } = request.body; // agora, acessamos o corpo da REQ!
 
@@ -38,12 +43,75 @@ class UsersController {
       throw new AppError("Este e-mail está em uso!");
     }
 
+    // variável que chama fcn hash com 2 parâmetros, a senha o SALT (fator de complexidade):
+    const hashedPassword = await hash(password, 8);
+
     await database.run(
       "INSERT INTO users (name, email, password) VALUES (?,?,?)",
-      [name, email, password]
+      [name, email, hashedPassword]
     );
 
     return response.status(201).json(); // devolve status q foi criado c/ json vazio
+  }
+
+  // FUNÇÃO UPDATE
+  async update(request, response) {
+    const { name, email, password, old_password } = request.body;
+    const { id } = request.params;
+
+    const database = await sqliteConnection(); // conexão com banco de dados
+    // buscamos o usuário pelo id. Dentro do parênteses, usamos código formato SQL p/verificar o id. Usamos tb "?" c/ um vetor p/variável q queremos substituir.
+    const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado!");
+    }
+
+    // verificando se o email inserido existe:
+    const userWithUpdatedEmail = await database.get(
+      "SELECT * FROM users WHERE email = (?)",
+      [email]
+    );
+
+    // verificando se o email inserido não está associado a um outro id de usuário:
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+      throw new AppError("Este email já está em uso!");
+    }
+
+    // atualiza os dados:
+    user.name = name;
+    user.email = email;
+
+    // verificando se o usuário informou a senha antiga:
+    if (password && !old_password) {
+      throw new AppError("Informe a sua senha antiga!");
+    }
+
+    // Usamos o método "compare" de bcrypt p/ verificar a senha antiga digitada c/ a senha do user no DB, pois as senhas são criptografadas:
+    if (password && old_password) {
+      const checkOldPassword = await compare(old_password, user.password);
+
+      // se senha digitada não conferir com a do DB:
+      if (!checkOldPassword) {
+        throw new AppError("Senha antiga não confere!");
+      }
+
+      // se conferir, atualiza criptografada:
+      user.password = await hash(password, 8);
+    }
+
+    await database.run(
+      `
+    UPDATE users SET
+    name = ?,
+    email = ?,
+    password = ?,
+    updated_at = ?
+    WHERE id = ?`,
+      [user.name, user.email, user.password, new Date(), id] // new Date gera a data/hora atual no server
+    );
+
+    return response.status(200).json(); // se omitir o status, ele retorna 200 por padrão
   }
 }
 
