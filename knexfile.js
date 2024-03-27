@@ -7,6 +7,16 @@ module.exports = {
     connection: {
       filename: path.resolve(__dirname, "src", "database", "database.db"), // informa o caminho p/ encontrar o arquivo do db independente do sistema operacional
     },
+    migrations: {
+      // informa o local p/armazenar as tabelas criadas automaticamente
+      directory: path.resolve(
+        __dirname,
+        "src",
+        "database",
+        "knex",
+        "migrations"
+      )
+    },
     useNullAsDefault: true, // add prop. padrão p/ SQLite
   },
 };
