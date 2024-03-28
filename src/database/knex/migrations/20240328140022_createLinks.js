@@ -1,4 +1,4 @@
-exports.up = function (knex) {
+exports.up = (knex) =>
   knex.schema.createTable("links", (table) => {
     // campos da tabela:
     table.increments("id");
@@ -7,6 +7,5 @@ exports.up = function (knex) {
 
     table.timestamp("created_at").default(knex.fn.now());
   });
-};
 
 exports.down = (knex) => knex.schema.dropTable("links");
