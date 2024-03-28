@@ -5,8 +5,8 @@ class NotesController {
     const { title, description, tags, links } = request.body;
     const { user_id } = request.params;
 
-    // OBS: envolvendo "note_id" com {} devido a atualização do knex
-    const {note_id} = await knex("notes").insert({
+    // OBS: envolvendo "note_id" com [] devido a atualização do knex
+    const [note_id] = await knex("notes").insert({
       title,
       description,
       user_id,
