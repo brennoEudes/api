@@ -7,6 +7,10 @@ module.exports = {
     connection: {
       filename: path.resolve(__dirname, "src", "database", "database.db"), // informa o caminho p/ encontrar o arquivo do db independente do sistema operacional
     },
+    pool: {
+      // prop q define o q será executado no momento de conexão c/DB. Aqui, vamos habilitar o mét CASCADE, q é desabilitado por padrão no SQLite.
+      afterCreate: (conn, cb) => conn.run("PRAGMA foreign_keys=ON", cb)
+    },
     migrations: {
       // informa o local p/armazenar as tabelas criadas automaticamente
       directory: path.resolve(
@@ -15,7 +19,7 @@ module.exports = {
         "database",
         "knex",
         "migrations"
-      )
+      ),
     },
     useNullAsDefault: true, // add prop. padrão p/ SQLite
   },
