@@ -76,7 +76,13 @@ class NotesController {
       const filterTags = tags.split(",").map((tag) => tag.trim());
       //console.log(filterTags);
 
-      notes = await knex("tags").whereIn("name", filterTags); // busca baseado nas tags, passando o vetor de verificação "filterTags"
+      notes = await knex("tags")
+        .select(["notes.id", "notes.title", "notes.user_id"]) // buscando na tab notes
+        .where("notes.user_id", user_id) // filtra baseado no id do user
+        .whereLike("title", `%${title}%`)
+        .whereIn("name", filterTags) // filtra baseado nas tags, passando o vetor de verificação "filterTags"
+        .innerJoin("notes", "notes.id", "tags.note_id")
+        .orderBy("notes.title"); // busca nota de um único usuário e em ordem alfabética
     } else {
       notes = await knex("notes")
         .where({ user_id })
