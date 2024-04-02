@@ -68,13 +68,15 @@ class NotesController {
 
   // INDEX
   async index(request, response) {
-    const { user_id } = request.query;
+    const { title, user_id } = request.query;
 
-    const notes = await knex("notes").where({ user_id }).orderBy("title"); // busca nota de um único usuário e em ordem alfabética
+    const notes = await knex("notes")
+      .where({ user_id })
+      .whereLike("title", `%${title}%`) // busca no DB por resultados que contenham a palavra. Ñ precisa ser exato
+      .orderBy("title"); // busca nota de um único usuário e em ordem alfabética
 
     return response.json(notes);
   }
-
 }
 
 module.exports = NotesController;
