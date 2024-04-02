@@ -3,7 +3,7 @@ const path = require("path"); // serve p/ encontrar o endereço do arquivo datab
 module.exports = {
   // obj com propriedades de confing. do knex c/ db:
   development: {
-    client: "sqlite3", // tipo de db
+    client: "sqlite3", // tipo de db (PODEMOS MUDAR O BANCO DE DADOS FUTURAMENTE, CASO NECESSÁRIO!)
     connection: {
       filename: path.resolve(__dirname, "src", "database", "database.db"), // informa o caminho p/ encontrar o arquivo do db independente do sistema operacional
     },

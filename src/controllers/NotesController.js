@@ -40,7 +40,7 @@ class NotesController {
     response.json();
   }
 
-  // READ
+  // READ (LISTA DADO ESPECÍFICO)
   async read(request, response) {
     const { id } = request.params;
 
@@ -66,7 +66,7 @@ class NotesController {
     return response.json();
   }
 
-  // INDEX
+  // INDEX (LISTA TUDO!)
   async index(request, response) {
     const { title, user_id, tags } = request.query;
 
