@@ -90,7 +90,20 @@ class NotesController {
         .orderBy("title"); // busca nota de um único usuário e em ordem alfabética
     }
 
-    return response.json(notes);
+    const userTags = await knex("tags").where({ user_id }); // busca tags por id do user
+
+    // percorre todas as notes
+    const notesWithTags = notes.map((note) => {
+      // filtrando as tags de uma note, em q o note_id seja igual ao id do user:
+      const noteTags = userTags.filter((tag) => tag.note_id === note.id);
+
+      return {
+        ...note,
+        tags: noteTags,
+      };
+    });
+
+    return response.json(notesWithTags); // retorna o noteWith Tags!
   }
 }
 
