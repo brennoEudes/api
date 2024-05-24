@@ -37,7 +37,7 @@ class NotesController {
     // inserindo as tags:
     await knex("tags").insert(tagsInsert);
 
-    response.json();
+    return response.json();
   }
 
   // READ (LISTA DADO ESPECÍFICO)
