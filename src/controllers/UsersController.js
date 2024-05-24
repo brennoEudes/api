@@ -57,11 +57,12 @@ class UsersController {
   // FUNÇÃO UPDATE
   async update(request, response) {
     const { name, email, password, old_password } = request.body;
-    const { id } = request.params;
+    //const { id } = request.params; Não é mais necessário quando passamos a pegar o id no corpo da REQ
+    const user_id = request.user.id; // pegando o user id dentro do corpo da REQ
 
     const database = await sqliteConnection(); // conexão com banco de dados
     // buscamos o usuário pelo id. Dentro do parênteses, usamos código formato SQL p/verificar o id. Usamos tb "?" c/ um vetor p/variável q queremos substituir.
-    const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
+    const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id]);
 
     if (!user) {
       throw new AppError("Usuário não encontrado!");
@@ -108,7 +109,7 @@ class UsersController {
     password = ?,
     updated_at = DATETIME('now')
     WHERE id = ?`,
-      [user.name, user.email, user.password, id] // Substituímos fcn JS Date() por fnc DB DATETIME() p/ ficar no formato correto no DB.
+      [user.name, user.email, user.password, user_id] // Substituímos fcn JS Date() por fnc DB DATETIME() p/ ficar no formato correto no DB.
     );
 
     return response.status(200).json(); // se omitir o status, ele retorna 200 por padrão

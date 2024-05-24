@@ -13,12 +13,14 @@ function ensureAuthenticated(request, response, next) {
   }
 
   // se existir:
-  const [, token] = authHeader.split(" "); // split quebra o texto no caracter espaço e assim capturamos a 2º posição no array (token).
+  const [, token] = authHeader.split(" "); // Bearer xxxxx. (tipo de token enviado ao backend)
+  // split quebra o texto no caracter espaço e assim capturamos a 2º posição no array (token).
 
   // verifica se token é válido:
   try {
-    const { sub: user_id } = verify(token, authConfig(jwt.secret));
+    const { sub: user_id } = verify(token, authConfig(jwt.secret)); // "sub" é onde acessamos o conteúdo no token de autenticação. Pegamos o id no usuário no token
 
+    // inserimos o id no corpo da REQ:
     request.user = {
       id: Number(user_id), // guardando o id como número no DB
     };

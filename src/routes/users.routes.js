@@ -13,6 +13,7 @@ const usersRoutes = Router(); // INICIALIZA o router;
 // }
 
 const usersController = new UsersController();
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 /* ANTES DO CONTROLLER */
 // // altera app p/ userRoutes (Tiramos o "users" depois q criamos o routes.use no index.js)
@@ -29,6 +30,7 @@ const usersController = new UsersController();
 /* DEPOIS DO CONTROLLER */
 usersRoutes.post("/", usersController.create); // quando for usar middleware, podemos na rota depois do caminho "/";
 
-usersRoutes.put("/:id", usersController.update); // mudamos o método HTTP e passando id como parâmetro
+usersRoutes.put("/", ensureAuthenticated, usersController.update); // mudamos o método HTTP e passando id como parâmetro
+// Ao passaramos a usar a autenticação(ensureAuthenticated), necessária caso o usuário queira realizar qq tipo de edição, já não será mais necessário passar o id como parâmtero
 
 module.exports = usersRoutes; // exporta as rotas p/ server.js e outros arquivos usarem!
