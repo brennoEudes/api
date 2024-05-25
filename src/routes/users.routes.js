@@ -1,8 +1,11 @@
 const { Router } = require("express"); // IMPORTA o router do express, pois até então, ele estava somente no server.js
+const multer = require("multer");
+const uploadConfig = require("../configs/upload");
 
 const UsersController = require("../controllers/UsersController");
 
 const usersRoutes = Router(); // INICIALIZA o router;
+const upload = multer(uploadConfig.MULTER); // inicia o multer
 
 // Exemplo de Middleware:
 // function myMiddleware(request, response, next) {
@@ -32,5 +35,15 @@ usersRoutes.post("/", usersController.create); // quando for usar middleware, po
 
 usersRoutes.put("/", ensureAuthenticated, usersController.update); // mudamos o método HTTP e passando id como parâmetro
 // Ao passaramos a usar a autenticação(ensureAuthenticated), necessária caso o usuário queira realizar qq tipo de edição, já não será mais necessário passar o id como parâmtero
+
+usersRoutes.patch(
+  "/avatar",
+  ensureAuthenticated,
+  upload.single("avatar"),
+  (request, response) => {
+    console.log(request.file.filename);
+    response.json();
+  }
+); // usamos "patch" p/ atualizar um campo específico
 
 module.exports = usersRoutes; // exporta as rotas p/ server.js e outros arquivos usarem!
