@@ -3,6 +3,8 @@ const multer = require("multer");
 const uploadConfig = require("../configs/upload");
 
 const UsersController = require("../controllers/UsersController");
+const UsersAvatarController = require("../controllers/UserAvatarController");
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 const usersRoutes = Router(); // INICIALIZA o router;
 const upload = multer(uploadConfig.MULTER); // inicia o multer
@@ -16,7 +18,7 @@ const upload = multer(uploadConfig.MULTER); // inicia o multer
 // }
 
 const usersController = new UsersController();
-const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+const userAvatarController = new UsersAvatarController();
 
 /* ANTES DO CONTROLLER */
 // // altera app p/ userRoutes (Tiramos o "users" depois q criamos o routes.use no index.js)
@@ -40,10 +42,7 @@ usersRoutes.patch(
   "/avatar",
   ensureAuthenticated,
   upload.single("avatar"),
-  (request, response) => {
-    console.log(request.file.filename);
-    response.json();
-  }
+  userAvatarController.update
 ); // usamos "patch" p/ atualizar um campo específico
 
 module.exports = usersRoutes; // exporta as rotas p/ server.js e outros arquivos usarem!
