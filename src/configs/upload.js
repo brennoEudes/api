@@ -6,7 +6,7 @@ const crypto = require("crypto");
 
 // como a const vai armazenar infos q serão usadas como configuração, usamos caixa alta:
 const TMP_FOLDER = path.resolve(__dirname, "..", "..", "tmp"); // tmp é uma pasta temporária na raíz q recebe os arquivos do upload
-const UPLOADS_FOLDER = path.resolve(__dirname, "uploads"); // pasta p/ armazenar os aquivos do upload
+const UPLOADS_FOLDER = path.resolve(TMP_FOLDER, "uploads"); // pasta p/ armazenar os aquivos do upload
 
 // multer é a biblio p/ fazer o upload
 const MULTER = {
