@@ -7,6 +7,8 @@ const AppError = require("./utils/AppError"); // importe p/ configurar o tratame
 
 const uploadConfig = require("./configs/upload"); // importe p/ acessar imgs
 
+const cors = require("cors"); // biblio q conecta front-end e back-end
+
 const express = require("express"); // importando tudo da pasta "express" q está dentro da node_modules
 
 const routes = require("./routes"); // importa como padrão o index.js da pasta routes.
@@ -14,6 +16,9 @@ const routes = require("./routes"); // importa como padrão o index.js da pasta 
 migrationsRun(); // executa o banco de dados (substitui o database())
 
 const app = express(); // inicializando o express
+
+
+app.use(cors()); // utiliza cors
 
 app.use(express.json()); // informa a aplicação q vamos receber as informações enviadas no corpo da REQ no formato json!
 
