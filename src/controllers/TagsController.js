@@ -7,7 +7,8 @@ class TagController {
     const user_id = request.user.id;
 
     const tags = await knex("tags") // busca na tabela tags os elementos abaixo:
-      .where({ user_id });
+      .where({ user_id })
+      .groupBy("name"); // agrupa por nome e evita duplicidade na renderização
 
     return response.json(tags);
   }
