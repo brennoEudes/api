@@ -85,6 +85,7 @@ class NotesController {
         .whereLike("title", `%${title}%`)
         .whereIn("name", filterTags) // filtra baseado nas tags, passando o vetor de verificação "filterTags"
         .innerJoin("notes", "notes.id", "tags.note_id")
+        .groupBy("notes.id") // filtra pelo id, evitando repetição
         .orderBy("notes.title"); // busca nota de um único usuário e em ordem alfabética
     } else {
       notes = await knex("notes")
