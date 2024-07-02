@@ -18,7 +18,7 @@ function ensureAuthenticated(request, response, next) {
 
   // verifica se token é válido:
   try {
-    const { sub: user_id } = verify(token, authConfig(jwt.secret)); // "sub" é onde acessamos o conteúdo no token de autenticação. Pegamos o id no usuário no token
+    const { sub: user_id } = verify(token, authConfig.jwt.secret); // "sub" é onde acessamos o conteúdo no token de autenticação. Pegamos o id no usuário no token
 
     // inserimos o id no corpo da REQ:
     request.user = {
