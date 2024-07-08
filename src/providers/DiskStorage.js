@@ -1,11 +1,11 @@
-const { fs } = require("fs"); // prop. node p/ manipulação de arquivos
+const  fs  = require("fs/promises"); // prop. node p/ manipulação de arquivos
 const path = require("path"); // permite a navegação entre repos
 const uploadConfig = require("../configs/upload");
 
 class DiskStorage {
   // a) fcn para salvar um arq:
   async saveFile(file) {
-    await fs.promises.rename(
+    await fs.rename(
       // a fcn rename é p/ mudar o arq de lugar
       path.resolve(uploadConfig.TMP_FOLDER, file), // pega o arq
       path.resolve(uploadConfig.UPLOADS_FOLDER, file) // aloca o arq
@@ -20,12 +20,12 @@ class DiskStorage {
 
     // tratamento de erros, por garantia:
     try {
-      await fs.promises.stat(filePath);
+      await fs.stat(filePath);
     } catch {
       return;
     }
 
-    await fs.promises.unlink(filePath);
+    await fs.unlink(filePath);
   }
 }
 
